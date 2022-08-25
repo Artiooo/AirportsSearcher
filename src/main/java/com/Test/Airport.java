@@ -63,11 +63,7 @@ public class Airport implements Comparable
     public static void initializeSearchable() throws NumberFormatException, IOException
     {
         try {
-            LocalTime lt1  = LocalTime.now();
             searchable = AirportParser.readFromConsole();
-            LocalTime lt2  = LocalTime.now();
-            Duration dur = Duration.between(lt1,lt2);
-            System.out.println("Время выполнения: initializeSearchable: " + dur.toMillis());
         } catch (IOException e) {
             throw new IOException(e.getMessage());
         } catch (NumberFormatException e) {

@@ -2,36 +2,26 @@ package com.Test;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Main
 {
     public static void main(String[] args) {
         try {
-            Airport.initializeSearchable();
-            HashSet<String> CSVLines = AirportParser.readFromCSV();
-            LocalTime lt1 = LocalTime.now();
-            TreeSet<Airport> airports = AirportParser.parseAirports(CSVLines);
-            Iterator<Airport> it = airports.tailSet(Airport.getSearchable()).iterator();
-            for(int i = 0; i < 5; i++)
-            {
-                if(!it.hasNext())
-                    break;
-                else
-                {
-                    System.out.println(it.next().toString());
-                }
-            }
+            Airport.initializeSearchable(); //Считываем широту и долготу с консоли
+            HashSet<String> CSVLines = AirportParser.readFromCSV(); //Считываем данные из файла
+            ArrayList<Airport> airports = AirportParser.parseAirports(CSVLines); //Парсим объекты Аэропорт
+            LocalTime lt1 = LocalTime.now(); //Засекаем время, потраченное на поиск
+            AirportParser.findNearest(airports, 5); //Находим необходимое количество ближайших аэропортов
             LocalTime lt2 = LocalTime.now();
             Duration duration = Duration.between(lt1, lt2);
-            System.out.println("Затраченное время: " + duration.toMillis());
+            System.out.println("Затраченное время: " + duration.toMillis()); //Выводим затраченное время
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;
         }
+
 
     }
 }

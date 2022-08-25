@@ -8,6 +8,7 @@
     <artifactId>airports-search</artifactId>
     <version>1</version>
     <build>
+        <finalName>airports-search</finalName>
         <plugins>
             <plugin>
                 <!-- Build an executable JAR -->

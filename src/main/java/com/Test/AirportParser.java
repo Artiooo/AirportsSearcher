@@ -1,13 +1,7 @@
 package com.Test;
 
 import java.io.*;
-import java.time.Duration;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.lang.Class;
+import java.util.*;
 
 
 public class AirportParser
@@ -34,22 +28,20 @@ public class AirportParser
         }
     }
 
-    public static HashSet<String> readFromCSV() throws FileNotFoundException, NullPointerException, IOException
+    public static HashSet<String> readFromCSV() throws NullPointerException, IOException
     {
-        LocalTime lt1  = LocalTime.now();
         HashSet<String> information = new HashSet<>();
-
+        if(AirportParser.class.getResourceAsStream(path) == null)
+            throw new NullPointerException("Ошибка при получении ресура.");
         try(InputStream input = AirportParser.class.getResourceAsStream(path);
             InputStreamReader isr = new InputStreamReader(input, "UTF-8");
-            BufferedReader bf = new BufferedReader(isr);)
+            BufferedReader bf = new BufferedReader(isr))
         {
             while(bf.ready())
             {
                 information.add(bf.readLine());
             }
-            LocalTime lt2  = LocalTime.now();
-            Duration dur = Duration.between(lt1,lt2);
-            System.out.println("Время выполнения: readFromCSV: " + dur.toMillis());
+
         }
         catch(FileNotFoundException e)
         {
@@ -65,13 +57,9 @@ public class AirportParser
         }
         return information;
     }
-    public static TreeSet<Airport> parseAirports(HashSet<String> CSVLines)
+    public static ArrayList<Airport> parseAirports(HashSet<String> CSVLines)
     {
-        LocalTime lt1  = LocalTime.now();
-
-
-        TreeSet<Airport> ts = new TreeSet<>();
-
+        ArrayList<Airport> al = new ArrayList<>();
         for(String element : CSVLines)
         {
             String[] splited = element.split(",(?=([^\"]*\"[^\"]*\")*(?![^\"]*\"))");
@@ -79,16 +67,23 @@ public class AirportParser
             sb.deleteCharAt(0);
             sb.deleteCharAt(sb.length()-1);
             splited[1] = sb.toString();
-            ts.add(new Airport(splited[1], Double.parseDouble(splited[6]), Double.parseDouble(splited[7])));
+            al.add(new Airport(splited[1], Double.parseDouble(splited[6]), Double.parseDouble(splited[7])));
         }
-
-
-
-        LocalTime lt2  = LocalTime.now();
-        Duration dur = Duration.between(lt1,lt2);
-        System.out.println("Время выполнения: parseAirports: " + dur.toMillis());
-
-        return ts;
+        return al;
+    }
+    public static void findNearest(List<Airport> list, int num)
+    {
+        Collections.sort(list);
+        Iterator<Airport> it = list.iterator();
+        for(int i = 0; i < num; i++)
+        {
+            if(!it.hasNext())
+                break;
+            else
+            {
+                System.out.println(it.next().toString());
+            }
+        }
     }
 
 
